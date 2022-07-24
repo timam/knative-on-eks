@@ -7,6 +7,12 @@ kubectl apply -l knative.dev/crd-install=true -f istio.yaml
 kubectl apply -f istio.yaml
 
 kubectl apply -f net-istio.yaml
+
+kubectl patch configmap/config-domain \
+  --namespace knative-serving \
+  --type merge \
+  --patch '{"data":{"fn.nodb.sh":""}}'
+
 ```
 
 
