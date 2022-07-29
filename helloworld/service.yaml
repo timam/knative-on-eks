@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: "helloworld"
+  name: helloworld
   labels:
-    name: "helloworld"
+    name: helloworld
 
 ---
 apiVersion: serving.knative.dev/v1
