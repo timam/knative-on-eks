@@ -267,3 +267,12 @@ horizontalpodautoscaler.autoscaling/activator   Deployment/activator   <unknown>
 horizontalpodautoscaler.autoscaling/webhook     Deployment/webhook     <unknown>/100%   1         5         1          51m
 
 ```
+
+### Domain Config
+```
+$ kubectl patch configmap/config-domain \
+  --namespace knative-serving \
+  --type merge \
+  --patch '{"data":{"kn.timam.io":""}}'
+configmap/config-domain patched
+```
