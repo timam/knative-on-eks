@@ -268,11 +268,26 @@ horizontalpodautoscaler.autoscaling/webhook     Deployment/webhook     <unknown>
 
 ```
 
-### Domain Config
+## Domain Config
 ```
 $ kubectl patch configmap/config-domain \
   --namespace knative-serving \
   --type merge \
   --patch '{"data":{"kn.timam.io":""}}'
 configmap/config-domain patched
+```
+
+## Create a service
+
+```
+helloworld]$ kubectl apply -f service.yaml
+namespace/helloworld created
+service.serving.knative.dev/go created
+
+helloworld]$ kubectl get ksvc -A
+NAMESPACE    NAME   URL                                LATESTCREATED   LATESTREADY   READY   REASON
+helloworld   go     http://go.helloworld.kn.timam.io   go-00001        go-00001      True    
+
+helloworld]$ curl http://go.helloworld.kn.timam.io
+Hello Go Sample v1!
 ```
