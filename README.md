@@ -1,8 +1,12 @@
 # Knative on EKS
 
+---
+
+
 ```
 EKS - 1.22
 CNI - v1.10.1-eksbuild.1
+aws-load-balancer-controller - v2.4.1 (helm chart - 1.4.1)
 
 ---
 
@@ -25,6 +29,8 @@ Supported APIs:
   - sources.knative.dev/v1 (knative-eventing v0.33.0)
   - eventing.knative.dev/v1 (knative-eventing v0.33.0)
 ```
+
+## Install the Knative Serving component
 
 ```
 $ kubectl apply -f https://github.com/knative/serving/releases/download/knative-v1.6.0/serving-crds.yaml
@@ -104,4 +110,90 @@ validatingwebhookconfiguration.admissionregistration.k8s.io/validation.webhook.d
 validatingwebhookconfiguration.admissionregistration.k8s.io/validation.webhook.serving.knative.dev created
 secret/webhook-certs created
 
+```
+
+Verify: The following components are now available on knative-serving namespace. 
+```
+$ kubectl get all -n knative-serving
+NAME                                         READY   STATUS    RESTARTS   AGE
+pod/activator-5f9df88fbb-bdfjw               1/1     Running   0          18m
+pod/autoscaler-c7d7bd5f-w6mhm                1/1     Running   0          18m
+pod/controller-5f64fb5c49-lg86b              1/1     Running   0          18m
+pod/domain-mapping-7499d44b7f-wzvlg          1/1     Running   0          18m
+pod/domainmapping-webhook-695848595b-dcphs   1/1     Running   0          18m
+pod/webhook-79d8bd799d-ddr9l                 1/1     Running   0          18m
+
+NAME                                 TYPE        CLUSTER-IP       EXTERNAL-IP   PORT(S)                                   AGE
+service/activator-service            ClusterIP   172.20.91.212    <none>        9090/TCP,8008/TCP,80/TCP,81/TCP,443/TCP   18m
+service/autoscaler                   ClusterIP   172.20.247.254   <none>        9090/TCP,8008/TCP,8080/TCP                18m
+service/autoscaler-bucket-00-of-01   ClusterIP   172.20.67.199    <none>        8080/TCP                                  17m
+service/controller                   ClusterIP   172.20.61.172    <none>        9090/TCP,8008/TCP                         18m
+service/domainmapping-webhook        ClusterIP   172.20.170.123   <none>        9090/TCP,8008/TCP,443/TCP                 18m
+service/webhook                      ClusterIP   172.20.96.104    <none>        9090/TCP,8008/TCP,443/TCP                 18m
+
+NAME                                    READY   UP-TO-DATE   AVAILABLE   AGE
+deployment.apps/activator               1/1     1            1           18m
+deployment.apps/autoscaler              1/1     1            1           18m
+deployment.apps/controller              1/1     1            1           18m
+deployment.apps/domain-mapping          1/1     1            1           18m
+deployment.apps/domainmapping-webhook   1/1     1            1           18m
+deployment.apps/webhook                 1/1     1            1           18m
+
+NAME                                               DESIRED   CURRENT   READY   AGE
+replicaset.apps/activator-5f9df88fbb               1         1         1       18m
+replicaset.apps/autoscaler-c7d7bd5f                1         1         1       18m
+replicaset.apps/controller-5f64fb5c49              1         1         1       18m
+replicaset.apps/domain-mapping-7499d44b7f          1         1         1       18m
+replicaset.apps/domainmapping-webhook-695848595b   1         1         1       18m
+replicaset.apps/webhook-79d8bd799d                 1         1         1       18m
+
+NAME                                            REFERENCE              TARGETS          MINPODS   MAXPODS   REPLICAS   AGE
+horizontalpodautoscaler.autoscaling/activator   Deployment/activator   <unknown>/100%   1         20        1          18m
+horizontalpodautoscaler.autoscaling/webhook     Deployment/webhook     <unknown>/100%   1         5         1          18m
+
+```
+
+## Install istio
+
+```
+$ istioctl install -y
+✔ Istio core installed                                                                                                                                                                                          
+✔ Istiod installed                                                                                                                                                                                              
+✔ Ingress gateways installed                                                                                                                                                                                    
+✔ Installation complete                                                                                                                                                                                         
+Making this installation the default for injection and validation.
+Thank you for installing Istio 1.14.  Please take a few minutes to tell us about your install/upgrade experience!  https://forms.gle/yEtCbt45FZ3VoDT5A
+
+$ kubectl label namespace knative-serving istio-injection=enabled
+namespace/knative-serving labeled
+
+$ touch PERMISSIVE.yaml
+$ cat <<EOF >>PERMISSIVE.yaml
+apiVersion: "security.istio.io/v1beta1"
+kind: "PeerAuthentication"
+metadata:
+  name: "default"
+  namespace: "knative-serving"
+spec:
+  mtls:
+    mode: PERMISSIVE
+EOF
+$ kubectl apply -f PERMISSIVE.yaml
+peerauthentication.security.istio.io/default created
+
+$ kubectl apply -f https://github.com/knative/net-istio/releases/download/knative-v1.6.0/net-istio.yaml
+clusterrole.rbac.authorization.k8s.io/knative-serving-istio created
+gateway.networking.istio.io/knative-ingress-gateway created
+gateway.networking.istio.io/knative-local-gateway created
+service/knative-local-gateway created
+configmap/config-istio created
+peerauthentication.security.istio.io/webhook created
+peerauthentication.security.istio.io/domainmapping-webhook created
+peerauthentication.security.istio.io/net-istio-webhook created
+deployment.apps/net-istio-controller created
+deployment.apps/net-istio-webhook created
+secret/net-istio-webhook-certs created
+service/net-istio-webhook created
+mutatingwebhookconfiguration.admissionregistration.k8s.io/webhook.istio.networking.internal.knative.dev created
+validatingwebhookconfiguration.admissionregistration.k8s.io/config.webhook.istio.networking.internal.knative.dev created
 ```
