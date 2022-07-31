@@ -291,3 +291,35 @@ helloworld   go     http://go.helloworld.kn.timam.io   go-00001        go-00001 
 helloworld]$ curl http://go.helloworld.kn.timam.io
 Hello Go Sample v1!
 ```
+
+## 
+
+```
+$ kubectl -n istio-system get svc istio-ingressgateway
+NAME                   TYPE           CLUSTER-IP      EXTERNAL-IP                                                                PORT(S)                                      AGE
+istio-ingressgateway   LoadBalancer   172.20.151.15   a2064bddcf6ed4d0ba63cd2c905ccacc-2103144973.ap-south-1.elb.amazonaws.com   15021:32560/TCP,80:32082/TCP,443:30066/TCP   37h
+
+$ istioctl install --set profile=default --set values.gateways.istio-ingressgateway.type=NodePort -y
+✔ Istio core installed                                                                                                                                                                                          
+✔ Istiod installed                                                                                                                                                                                              
+✔ Ingress gateways installed                                                                                                                                                                                    
+✔ Installation complete                                                                                                                                                                                         Making this installation the default for injection and validation.
+
+Thank you for installing Istio 1.14.  Please take a few minutes to tell us about your install/upgrade experience!  https://forms.gle/yEtCbt45FZ3VoDT5A
+
+$ kubectl -n istio-system get svc istio-ingressgateway
+NAME                   TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)                                      AGE
+istio-ingressgateway   NodePort   172.20.151.15   <none>        15021:32560/TCP,80:32082/TCP,443:30066/TCP   37h
+
+  ports:                       # Take note of nodePort for status-port
+   - name: status-port
+    nodePort: 32560
+    port: 15021
+    protocol: TCP
+    targetPort: 15021
+    
+$ kubectl apply -f istio/ingress.yaml 
+ingress.networking.k8s.io/istio-alb created
+
+
+```
