@@ -307,7 +307,7 @@ $ istioctl install --set profile=default --set values.gateways.istio-ingressgate
 
 Thank you for installing Istio 1.14.  Please take a few minutes to tell us about your install/upgrade experience!  https://forms.gle/yEtCbt45FZ3VoDT5A
 
-$ kubectl -n istio-system get svc istio-ingressgateway
+$ kubectl -n istio-system get svc istio-ingressgateway -o yaml
 NAME                   TYPE       CLUSTER-IP      EXTERNAL-IP   PORT(S)                                      AGE
 istio-ingressgateway   NodePort   172.20.151.15   <none>        15021:32560/TCP,80:32082/TCP,443:30066/TCP   37h
 
@@ -326,6 +326,9 @@ ingress.networking.k8s.io/istio-alb created
 After alb is created, get the CNAME and update DNS accordingly.  
 
 ```
+$ kubectl get ing -n istio-system
+istio-alb   <none>   *       k8s-istiosys-istioalb-4449d90e45-243824077.eu-central-1.elb.amazonaws.com   80      32s
+
 $ kubectl get ksvc -A
 NAMESPACE    NAME   URL                                LATESTCREATED   LATESTREADY   READY   REASON
 helloworld   go     http://go.helloworld.kn.timam.io   go-00001        go-00001      True   
