@@ -11,7 +11,7 @@ metadata:
     alb.ingress.kubernetes.io/subnets: 	subnet-09455931037f15f3f, subnet-0c2b42f0dc70fcb11, subnet-0b9a0c788879de2f3
     alb.ingress.kubernetes.io/security-groups: sg-0ee08fc23c610e7b4
     alb.ingress.kubernetes.io/healthcheck-path: /healthz/ready
-    alb.ingress.kubernetes.io/healthcheck-port: "30777"
+    alb.ingress.kubernetes.io/healthcheck-port: "15021"
 spec:
   rules:
     - http:
