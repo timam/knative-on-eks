@@ -321,5 +321,16 @@ istio-ingressgateway   NodePort   172.20.151.15   <none>        15021:32560/TCP,
 $ kubectl apply -f istio/ingress.yaml 
 ingress.networking.k8s.io/istio-alb created
 
+```
+
+After alb is created, get the CNAME and update DNS accordingly.  
 
 ```
+$ kubectl get ksvc -A
+NAMESPACE    NAME   URL                                LATESTCREATED   LATESTREADY   READY   REASON
+helloworld   go     http://go.helloworld.kn.timam.io   go-00001        go-00001      True   
+
+$ curl http://go.helloworld.kn.timam.io
+Hello Go Sample v1!
+```
+
