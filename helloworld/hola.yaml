@@ -15,7 +15,7 @@ spec:
   template:
     spec:
       containers:
-        - image: docker.io/timam/hola-go
+        - image: docker.io/timam/helloworld-go
           env:
             - name: TARGET
               value: "Hola!!"
