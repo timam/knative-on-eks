@@ -6,6 +6,13 @@ metadata:
     name: timam
 
 ---
+apiVersion: networking.internal.knative.dev/v1alpha1
+kind: ClusterDomainClaim
+metadata:
+  name: helloworld.timam.io
+spec:
+  namespace: timam
+---
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
@@ -23,7 +30,7 @@ spec:
 apiVersion: serving.knative.dev/v1alpha1
 kind: DomainMapping
 metadata:
-  name: timam.io
+  name: helloworld.timam.io
   namespace: timam
 spec:
   ref:
