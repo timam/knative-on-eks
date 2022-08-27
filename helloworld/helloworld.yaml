@@ -2,31 +2,31 @@
 apiVersion: networking.internal.knative.dev/v1alpha1
 kind: ClusterDomainClaim
 metadata:
-  name: hola.timam.io
+  name: helloworld.timam.io
 spec:
   namespace: timam
 ---
 apiVersion: serving.knative.dev/v1
 kind: Service
 metadata:
-  name: hola
+  name: helloworld
   namespace: timam
 spec:
   template:
     spec:
       containers:
-        - image: docker.io/timam/hola-go
+        - image: docker.io/timam/helloworld-go
           env:
             - name: TARGET
-              value: "Hola!!"
+              value: "Go Sample v1"
 ---
 apiVersion: serving.knative.dev/v1alpha1
 kind: DomainMapping
 metadata:
-  name: hola.timam.io
+  name: helloworld.timam.io
   namespace: timam
 spec:
   ref:
-    name: hola
+    name: helloworld
     kind: Service
     apiVersion: serving.knative.dev/v1
