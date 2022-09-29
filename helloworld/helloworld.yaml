@@ -18,7 +18,13 @@ spec:
         - image: docker.io/timam/helloworld-go
           env:
             - name: TARGET
-              value: "Go Sample v1"
+              value: "Go Sample v2"
+  traffic:
+    - revisionName: helloworld-00001
+      percent: 100
+    - revisionName: helloworld-00002
+      percent: 0
+      tag: v2
 ---
 apiVersion: serving.knative.dev/v1alpha1
 kind: DomainMapping
