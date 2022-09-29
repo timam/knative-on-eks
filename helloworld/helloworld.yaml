@@ -21,10 +21,10 @@ spec:
               value: "Go Sample v3"
   traffic:
     - revisionName: helloworld-00002
-      percent: 0
+      percent: 100
       tag: v2
     - revisionName: helloworld-00003
-      percent: 100
+      percent: 0
       tag: v3
 ---
 apiVersion: serving.knative.dev/v1alpha1
