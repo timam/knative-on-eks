@@ -1,0 +1,11 @@
+apiVersion: v2
+name: dev-nodb-helloworld
+description: A Helm chart for cheq core backend Service
+
+type: application
+version: 2.0.0
+
+dependencies:
+  - name: deployment
+    version: "1.2.1"
+    repository: "file://charts/deployment-2.0.0.tgz"

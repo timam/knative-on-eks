@@ -1,0 +1,3 @@
+deployment:
+  env_vars:
+    TARGET: "Go Sample v1"
