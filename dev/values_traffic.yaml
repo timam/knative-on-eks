@@ -1,0 +1,3 @@
+deployment:
+  bata_revision: helloworld-00001
+  live_revision: helloworld-00001
