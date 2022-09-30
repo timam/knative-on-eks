@@ -1,0 +1,5 @@
+deployment:
+  namespace: "dev-mumbai-nodb"
+  microservice_name: "dev-nodb-helloworld"
+  docker_image: "144161207422.dkr.ecr.ap-south-1.amazonaws.com/dev-mumbai-nodb-helloworld"
+
