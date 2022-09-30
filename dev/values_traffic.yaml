@@ -1,3 +1,5 @@
 deployment:
+  beta_traffic: 0
   bata_revision: helloworld-00001
   live_revision: helloworld-00001
+  live_traffic: 100
