@@ -1,0 +1,14 @@
+---
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: go
+  namespace: helloworld
+spec:
+  template:
+    spec:
+      containers:
+        - image: docker.io/timam/helloworld-go
+          env:
+            - name: TARGET
+              value: "from Knative!!"

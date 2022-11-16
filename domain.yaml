@@ -1,0 +1,18 @@
+---
+apiVersion: networking.internal.knative.dev/v1alpha1
+kind: ClusterDomainClaim
+metadata:
+  name: helloworld.timam.io
+spec:
+  namespace: helloworld
+---
+apiVersion: serving.knative.dev/v1alpha1
+kind: DomainMapping
+metadata:
+  name: helloworld.timam.io
+  namespace: helloworld
+spec:
+  ref:
+    name: go
+    kind: Service
+    apiVersion: serving.knative.dev/v1
